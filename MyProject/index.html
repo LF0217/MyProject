@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>项目</title>
+		<style type="text/css">
+			* {margin: 0;padding: 0;font-size: 20px;text-decoration: none;list-style: none;}
+			html,body {overflow-x: hidden;width:100%;height: 100%;}
+			a {display: inline-block;height: 30px;line-height: 30px;color: #fff;}
+			canvas {display: block; position: absolute;z-index: -1;background: #f7f4e4;}
+			.content {box-sizing: border-box; width: 100%;margin: 0 auto;padding: 50px 10px;max-width: 750px;}
+			.content ul {overflow: hidden;border-radius: 10px; background: #3498db;}
+			.content li .title {text-align: center;}
+			.content li .title a{display: block;padding: 10px;border-top: 1px solid #2980b9;}
+			.content li .describe {position: relative;overflow: hidden;transition:max-height .3s ;max-height: 0;;
+							background: #333;color: #fff;}
+			.content li .describe a{float: right;color: #ccc;border-bottom: 2px solid #ccc;text-indent: 5px;}
+			.content li .describe span{display:block;padding: 10px;text-indent: 25px;}
+			.content li:target .describe{max-height: 10em;}
+		</style>
+	</head>
+	<body>
+		<canvas id="canvas"></canvas>
+		<div class="content">
+			<ul>
+				<li id="game">
+					<div class="title">
+						<a href="#game">Html5网页游戏</a>
+					</div>
+					<div class="describe">
+						<span>
+							本项目使用了h5+css+js+ajax+java+tomcat+ mysql技术,游戏界面用canvas绘制，
+							js进行游戏逻辑控制，使用ajax和服务器端进行数据交互。
+							<a href="http://39.108.87.38:8080/Game" target="_blank">前往&gt;</a>
+						</span>
+					</div>
+				</li>
+				<li id="shop">
+					<div class="title">
+						<a href="#shop">荣耀商城</a>
+					</div>
+					<div class="describe">
+						<span>
+							本项目使用了html+css+js技术,完成了商城首页的展示。<a href="http://39.108.87.38:8080/仿荣耀商城" target="_blank">前往&gt;</a>
+						</span>
+					</div>
+				</li>
+				<li id="show">
+					<div class="title">
+						<a href="#show">阿里百秀</a>
+					</div>
+					<div class="describe">
+						<span>
+							本项目使用了html+css+bootstrap,完成了首页的响应式布局，可通过缩放浏览器窗口查看效果。
+							<a href="http://39.108.87.38:8080/100show" target="_blank">前往&gt;</a>
+						</span>
+					</div>
+				</li>
+				<li id="go">
+					<div class="title">
+						<a href="#go">去哪儿网</a>
+					</div>
+					<div class="describe">
+						<span>
+							使用vue-cli3+axios+vue-router+vuex 完成了主页面显示和右上角的城市选择页面，主页上的链接用的去哪儿网的链接，
+							切换城市会改变优惠活动的内容。  <strong>打开后请在控制台切换成移动端显示</strong>
+							<a href="http://39.108.87.38:8080/wtogo" target="_blank">前往&gt;</a>
+						</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<script type="text/javascript">
+			window.onload = function() {
+				console.log(document.visibilityState);								//判断页面状态
+				var width=document.body.clientWidth;
+				var height=document.body.clientHeight;
+				var canvas = document.querySelector("#canvas");
+				canvas.width=width;
+				canvas.height=height;
+				var cxt = canvas.getContext("2d");
+				window.onresize=function(){
+					var width=document.body.clientWidth;
+					var height=document.body.clientHeight;
+					canvas.width=width;
+					canvas.height=height;
+					for (var i = 0; i < arr.length; i++) {
+						cxt.save();
+						var rgba = "rgba" + "(" + arr[i].red + "," + arr[i].green + "," + arr[i].blue + "," + arr[i].opacity + ")";
+						cxt.fillStyle = rgba;
+						cxt.beginPath();
+						cxt.arc(arr[i].left, arr[i].top, arr[i].r, 0, 2 * Math.PI);
+						cxt.fill();
+						cxt.restore();
+						arr[i].r += 0.2; //半径扩散速度
+						arr[i].opacity -= 0.01; //透明化速度
+						if (arr[i].opacity <= 0) {
+							arr.splice(i, 1);
+							i--;
+						}
+					}
+				}
+				var arr = [];
+				var arr_move = [];
+				var rgb={
+					r:255,
+					g:0,
+					b:0
+				}
+				setInterval(function() {
+					cxt.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+					for (var i = 0; i < arr.length; i++) {
+						cxt.save();
+						var rgba = "rgba" + "(" + arr[i].red + "," + arr[i].green + "," + arr[i].blue + "," + arr[i].opacity + ")";
+						cxt.fillStyle = rgba;
+						cxt.beginPath();
+						cxt.arc(arr[i].left, arr[i].top, arr[i].r, 0, 2 * Math.PI);
+						cxt.fill();
+						cxt.restore();
+						arr[i].r += 0.5; //半径扩散速度
+						arr[i].opacity -= 0.01; //透明化速度
+						if (arr[i].opacity <= 0) {
+							arr.splice(i, 1);
+							i--;
+						}
+					}
+				}, 20);
+				setInterval(function() {
+					setTimeout(addPower,Math.floor(Math.random()*100));
+				}, 500);
+				document.onmousedown = function(e) {
+					if(rgb.r==255&&rgb.g==0&&rgb.b!=255){
+						rgb.b=rgb.b+50>255?255:rgb.b+50;
+					}else if(rgb.r==255&&rgb.b==0&&rgb.g!=0){
+						rgb.g=rgb.g-50<0?0:rgb.g-50;
+					}else if(rgb.r==0&&rgb.g==255&&rgb.b!=0){
+						rgb.b=rgb.b-50<0?0:rgb.b-50;
+					}else if(rgb.r==0&&rgb.b==255&&rgb.g!=255){
+						rgb.g=rgb.g+50>255?255:rgb.g+50;
+					}else if(rgb.b==255&&rgb.g==0&&rgb.r!=0){
+						rgb.r=rgb.r-50<0?0:rgb.r-50;
+					}else if(rgb.b==0&&rgb.g==255&&rgb.r!=255){
+						rgb.r=rgb.r+50>255?255:rgb.r+50;
+					}
+					arr.push({
+						r: 1,
+						left: e.pageX,
+						leftT: e.pageX,
+						top: e.pageY,
+						red: rgb.r,
+						green: rgb.g,
+						blue: rgb.b,
+						opacity: 1,
+					});
+				}
+				function addPower(){
+					var left = Math.random() * canvas.clientWidth;
+					arr.push({
+						r: 1,
+						left: left,
+						leftT: left,
+						top: Math.random() * canvas.clientHeight,
+						red: Math.floor(Math.random() * 255),
+						green: Math.floor(Math.random() * 255),
+						blue: Math.floor(Math.random() * 255),
+						opacity: 0.8,
+					});
+				}
+			}
+		</script>
+	</body>
+</html>
